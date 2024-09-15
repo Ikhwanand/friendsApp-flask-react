@@ -1,8 +1,22 @@
-from flask import request, jsonify
+from flask import request, jsonify, send_from_directory
 from models import Friends
 from config import db, app
+import os
+
+
+frontend_folder = os.path.join(os.getcwd(), "..", "frontend")
+dist_folder = os.path.join(frontend_folder, "dist")
+
+# server static files from "dist" folder under the "frontend" directory
+@app.route("/", defaults={"filename": ""})
+@app.route("/<path:filename>")
+def index(filename):
+    if not filename:
+        filename = "index.html"
+    return send_from_directory(dist_folder, filename)
 
 # CRUD API
+
 
 # Get friends data
 @app.route("/api/friends", methods=['GET'])
